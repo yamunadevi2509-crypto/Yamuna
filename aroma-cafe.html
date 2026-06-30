@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aroma Cafe — Coffee for the Campus Crowd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF3E7;
+    --coffee:#3B2417;
+    --coffee-deep:#2A1A10;
+    --terracotta:#C2603B;
+    --gold:#D9A441;
+    --sage:#7C8B6F;
+    --line: rgba(59,36,23,0.14);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--coffee);
+    font-family:'Karla', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:'Karla', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--terracotta);
+  }
+  .section-pad{padding:96px 0;}
+  @media(max-width:720px){ .section-pad{padding:64px 0;} }
+
+  /* === FOCUS / A11Y === */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:3px solid var(--gold);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* === HEADER === */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(251,243,231,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:22px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo span{color:var(--terracotta);}
+  .nav-links{display:flex; gap:32px; font-size:14.5px; font-weight:500;}
+  .nav-links a{position:relative; padding:4px 0;}
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:2px; background:var(--terracotta);
+    transition:width 0.25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{display:flex; align-items:center; gap:12px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 22px;
+    border-radius:var(--radius);
+    font-weight:700;
+    font-size:14.5px;
+    border:1.5px solid var(--coffee);
+    transition:transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+    white-space:nowrap;
+  }
+  .btn-solid{background:var(--coffee); color:var(--cream);}
+  .btn-solid:hover{background:var(--coffee-deep); transform:translateY(-1px);}
+  .btn-whatsapp{background:#3F7D4F; border-color:#3F7D4F; color:#fff;}
+  .btn-whatsapp:hover{background:#356A42; transform:translateY(-1px);}
+  .btn-outline{background:transparent; color:var(--coffee);}
+  .btn-outline:hover{background:var(--coffee); color:var(--cream);}
+  .menu-toggle{display:none; background:none; border:none; cursor:pointer; padding:6px;}
+  .menu-toggle span{display:block; width:24px; height:2px; background:var(--coffee); margin:5px 0; transition:0.25s;}
+
+  @media(max-width:900px){
+    .nav-links{
+      position:fixed; top:64px; left:0; right:0; bottom:0;
+      background:var(--cream);
+      flex-direction:column; align-items:flex-start;
+      padding:32px 24px; gap:20px; font-size:18px;
+      transform:translateX(100%); transition:transform 0.3s ease;
+      overflow-y:auto;
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-cta .btn-outline{display:none;}
+    .menu-toggle{display:block;}
+  }
+
+  /* === HERO === */
+  .hero{
+    position:relative;
+    padding-top:160px;
+    padding-bottom:90px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 78% 18%, rgba(217,164,65,0.25), transparent 55%),
+      linear-gradient(180deg, var(--cream) 0%, #F6E9D6 100%);
+  }
+  .hero-grain{
+    position:absolute; inset:0; opacity:0.05; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .hero-inner{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
+    position:relative; z-index:1;
+  }
+  @media(max-width:900px){ .hero-inner{grid-template-columns:1fr;} }
+  .hero h1{
+    font-size:clamp(40px, 6vw, 68px);
+    margin:18px 0 22px;
+  }
+  .hero h1 em{
+    font-style:italic; color:var(--terracotta); font-weight:500;
+  }
+  .hero p.lead{
+    font-size:18px; max-width:480px; color:#5C4632; margin-bottom:32px;
+  }
+  .hero-actions{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:36px;}
+  .hero-stats{display:flex; gap:36px; flex-wrap:wrap;}
+  .hero-stat strong{display:block; font-family:'Fraunces',serif; font-size:28px;}
+  .hero-stat span{font-size:13px; color:#6b5847; text-transform:uppercase; letter-spacing:0.08em;}
+
+  .hero-visual{
+    position:relative;
+    aspect-ratio:4/5;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(42,26,16,0.45);
+    background:linear-gradient(160deg,#5C3A24,#2A1A10);
+  }
+  .hero-visual img{width:100%; height:100%; object-fit:cover;}
+  .hero-badge{
+    position:absolute; bottom:18px; left:18px; right:18px;
+    background:rgba(251,243,231,0.95);
+    border-radius:10px;
+    padding:14px 18px;
+    display:flex; align-items:center; gap:12px;
+    box-shadow:0 12px 30px rgba(42,26,16,0.25);
+  }
+  .hero-badge .dot{
+    width:10px;height:10px;border-radius:50%;background:#3F7D4F; flex-shrink:0;
+    box-shadow:0 0 0 4px rgba(63,125,79,0.18);
+  }
+  .hero-badge strong{font-size:14px;}
+  .hero-badge p{font-size:12.5px; color:#6b5847; margin:0;}
+
+  /* === STRIP (who we serve) === */
+  .audience-strip{
+    background:var(--coffee);
+    color:var(--cream);
+    padding:18px 0;
+    overflow:hidden;
+  }
+  .strip-track{
+    display:flex; gap:60px; white-space:nowrap;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:18px;
+    animation:scroll 28s linear infinite;
+  }
+  .strip-track span{opacity:0.85;}
+  @keyframes scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+
+  /* === SECTION HEADERS === */
+  .section-head{max-width:600px; margin-bottom:48px;}
+  .section-head h2{font-size:clamp(30px,4vw,42px); margin-top:10px;}
+  .section-head p{color:#5C4632; margin-top:14px; font-size:16px;}
+
+  /* === WHO WE SERVE CARDS === */
+  .audience-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  }
+  @media(max-width:800px){ .audience-grid{grid-template-columns:1fr;} }
+  .audience-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:30px 26px;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .audience-card:hover{transform:translateY(-4px); box-shadow:0 16px 32px -16px rgba(42,26,16,0.25);}
+  .audience-card .icon{
+    width:46px;height:46px;border-radius:50%;
+    background:var(--cream); display:flex; align-items:center; justify-content:center;
+    font-size:20px; margin-bottom:18px;
+  }
+  .audience-card h3{font-size:19px; margin-bottom:10px;}
+  .audience-card p{font-size:14.5px; color:#5C4632;}
+
+  /* === MENU === */
+  .menu-section{background:#2A1A10; color:var(--cream);}
+  .menu-section .section-head p{color:#C9B79F;}
+  .menu-section .eyebrow{color:var(--gold);}
+  .menu-tabs{display:flex; gap:10px; margin-bottom:40px; flex-wrap:wrap;}
+  .menu-tab{
+    padding:9px 18px; border-radius:30px; font-size:13.5px; font-weight:700;
+    border:1px solid rgba(251,243,231,0.25); cursor:pointer; background:transparent; color:var(--cream);
+    transition:0.2s;
+  }
+  .menu-tab.active, .menu-tab:hover{background:var(--terracotta); border-color:var(--terracotta);}
+  .menu-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:0 56px;}
+  @media(max-width:800px){ .menu-grid{grid-template-columns:1fr;} }
+  .menu-category{display:none; margin-bottom:8px;}
+  .menu-category.active{display:block;}
+  .menu-item{
+    display:flex; justify-content:space-between; gap:16px;
+    padding:18px 0; border-bottom:1px dashed rgba(251,243,231,0.2);
+  }
+  .menu-item:last-child{border-bottom:none;}
+  .menu-item-name{font-family:'Fraunces',serif; font-size:18px; font-weight:600;}
+  .menu-item-desc{font-size:13.5px; color:#C9B79F; margin-top:4px; max-width:320px;}
+  .menu-item-price{font-family:'Fraunces',serif; font-size:18px; color:var(--gold); white-space:nowrap;}
+  .menu-tag{
+    display:inline-block; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em;
+    background:var(--terracotta); color:#fff; padding:2px 8px; border-radius:20px; margin-left:8px; vertical-align:middle;
+  }
+
+  .daily-highlight{
+    margin-top:60px;
+    background:linear-gradient(120deg, rgba(217,164,65,0.14), rgba(194,96,59,0.1));
+    border:1px solid rgba(217,164,65,0.3);
+    border-radius:12px;
+    padding:30px 32px;
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+  }
+  .daily-highlight h4{font-size:22px; color:var(--gold); margin-bottom:6px;}
+  .daily-highlight p{font-size:14.5px; color:#E4D6C2; max-width:480px;}
+
+  /* === GALLERY === */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-auto-rows:160px;
+    gap:14px;
+  }
+  @media(max-width:800px){ .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:140px;} }
+  .gallery-grid img{width:100%; height:100%; object-fit:cover; border-radius:8px; transition:transform 0.4s ease;}
+  .gallery-item{overflow:hidden; border-radius:8px; cursor:pointer;}
+  .gallery-item:hover img{transform:scale(1.06);}
+  .gallery-item.big{grid-column:span 2; grid-row:span 2;}
+  @media(max-width:800px){ .gallery-item.big{grid-column:span 2; grid-row:span 1;} }
+
+  /* === REVIEWS === */
+  .reviews-wrap{background:var(--cream);}
+  .reviews-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  }
+  @media(max-width:900px){ .reviews-grid{grid-template-columns:1fr;} }
+  .review-card{
+    background:#fff; border:1px solid var(--line); border-radius:10px; padding:28px;
+  }
+  .stars{color:var(--gold); font-size:15px; margin-bottom:14px; letter-spacing:2px;}
+  .review-card p.quote{font-size:15px; color:#4A3829; margin-bottom:20px; font-style:italic;}
+  .reviewer{display:flex; align-items:center; gap:12px;}
+  .reviewer .avatar{
+    width:38px; height:38px; border-radius:50%;
+    background:var(--terracotta); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:15px;
+  }
+  .reviewer strong{font-size:14px; display:block;}
+  .reviewer span{font-size:12.5px; color:#7a6650;}
+
+  /* === LOCATION + CONTACT === */
+  .contact-section{
+    background:#F6E9D6;
+  }
+  .contact-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;
+  }
+  @media(max-width:900px){ .contact-grid{grid-template-columns:1fr;} }
+  .info-list{margin:28px 0; display:flex; flex-direction:column; gap:18px;}
+  .info-row{display:flex; gap:14px; align-items:flex-start;}
+  .info-row .ic{
+    width:38px;height:38px;border-radius:8px; background:var(--coffee); color:var(--cream);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px;
+  }
+  .info-row strong{display:block; font-size:14.5px;}
+  .info-row span{font-size:14px; color:#5C4632;}
+  .map-frame{
+    width:100%; height:260px; border-radius:10px; overflow:hidden; border:1px solid var(--line);
+    margin-top:8px;
+  }
+  .map-frame iframe{width:100%; height:100%; border:0;}
+
+  form{
+    background:#fff; border:1px solid var(--line); border-radius:12px; padding:32px;
+  }
+  .field{margin-bottom:18px;}
+  .field label{display:block; font-size:13px; font-weight:700; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em; color:#5C4632;}
+  .field input, .field textarea, .field select{
+    width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:8px;
+    font-family:'Karla',sans-serif; font-size:14.5px; background:var(--cream); color:var(--coffee);
+    transition:border-color 0.2s;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{
+    border-color:var(--terracotta); outline:none;
+  }
+  .field textarea{resize:vertical; min-height:100px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:520px){ .form-row{grid-template-columns:1fr;} }
+  .form-submit{width:100%; justify-content:center; border:none; cursor:pointer; font-size:15px; padding:14px;}
+  .form-note{font-size:12.5px; color:#7a6650; margin-top:12px; text-align:center;}
+
+  /* === FINAL CTA === */
+  .final-cta{
+    background:var(--coffee-deep);
+    color:var(--cream);
+    text-align:center;
+    padding:90px 24px;
+    position:relative;
+    overflow:hidden;
+  }
+  .final-cta::before{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at 50% 0%, rgba(217,164,65,0.18), transparent 60%);
+  }
+  .final-cta h2{font-size:clamp(28px,4.5vw,44px); position:relative; max-width:640px; margin:0 auto 16px;}
+  .final-cta p{color:#C9B79F; max-width:480px; margin:0 auto 34px; position:relative;}
+  .final-cta .hero-actions{justify-content:center; position:relative;}
+
+  /* === FOOTER === */
+  footer{
+    background:var(--coffee-deep); color:#C9B79F; padding:40px 0 28px; border-top:1px solid rgba(251,243,231,0.08);
+  }
+  .footer-inner{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .footer-inner .logo{color:var(--cream);}
+  .footer-links{display:flex; gap:24px; font-size:13.5px;}
+  .footer-bottom{font-size:12.5px; margin-top:24px; opacity:0.7; text-align:center;}
+
+  /* === FLOATING WHATSAPP === */
+  .float-whatsapp{
+    position:fixed; bottom:22px; right:22px; z-index:90;
+    width:58px; height:58px; border-radius:50%;
+    background:#3F7D4F; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+    box-shadow:0 10px 24px rgba(63,125,79,0.45);
+    transition:transform 0.2s ease;
+  }
+  .float-whatsapp:hover{transform:scale(1.08);}
+
+  .visually-hidden{
+    position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="#top" class="logo">☕ Aroma<span>Cafe</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit Us</a>
+      <a href="tel:+15551234567" class="btn btn-outline" style="margin-top:8px;">📞 (555) 123-4567</a>
+      <a href="https://wa.me/15551234567?text=Hi%20Aroma%20Cafe%2C%20I%27d%20like%20to%20order" class="btn btn-whatsapp" target="_blank" rel="noopener">WhatsApp Order</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#visit" class="btn btn-outline">Find Us</a>
+      <a href="https://wa.me/15551234567?text=Hi%20Aroma%20Cafe%2C%20I%27d%20like%20to%20order" class="btn btn-whatsapp" target="_blank" rel="noopener">
+        WhatsApp
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grain"></div>
+    <div class="wrap hero-inner">
+      <div>
+        <span class="eyebrow">2-min walk from Maple Hill College</span>
+        <h1>Your study break, <em>perfected.</em></h1>
+        <p class="lead">Hand-pulled espresso, all-day breakfast, and quiet corners for cramming or catching up — Aroma Cafe is where the campus actually hangs out.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/15551234567?text=Hi%20Aroma%20Cafe%2C%20I%27d%20like%20to%20order" class="btn btn-whatsapp" target="_blank" rel="noopener">
+            💬 Order on WhatsApp
+          </a>
+          <a href="#menu" class="btn btn-outline">View Menu</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong>4.8★</strong><span>312 Reviews</span></div>
+          <div class="hero-stat"><strong>7am–9pm</strong><span>Open Daily</span></div>
+          <div class="hero-stat"><strong>2 min</strong><span>From Campus Gate</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?q=80&w=900&auto=format&fit=crop" alt="Barista pouring latte art into a cup at Aroma Cafe">
+        <div class="hero-badge">
+          <div class="dot"></div>
+          <div>
+            <strong>Open Now</strong>
+            <p>Closes 9:00 PM · Free WiFi · Power outlets at every table</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE STRIP -->
+  <div class="audience-strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>For early lecture coffee runs</span>
+      <span>For Sunday family brunch</span>
+      <span>For late-night study groups</span>
+      <span>For neighbors who just want quiet</span>
+      <span>For early lecture coffee runs</span>
+      <span>For Sunday family brunch</span>
+      <span>For late-night study groups</span>
+      <span>For neighbors who just want quiet</span>
+    </div>
+  </div>
+
+  <!-- WHO WE SERVE -->
+  <section class="section-pad">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Made for the neighborhood</span>
+        <h2>One cafe, three kinds of regulars.</h2>
+        <p>Whether you're between classes, out with the kids, or just live around the corner — there's a table with your name on it.</p>
+      </div>
+      <div class="audience-grid">
+        <div class="audience-card">
+          <div class="icon">🎓</div>
+          <h3>Students</h3>
+          <p>Free WiFi, outlets at every seat, student discount on combos, and a back room that stays quiet after 6pm — built for finals week and everything before it.</p>
+        </div>
+        <div class="audience-card">
+          <div class="icon">👨‍👩‍👧</div>
+          <h3>Families</h3>
+          <p>Spacious booths, a kids' hot chocolate menu, high chairs on request, and weekend brunch that doesn't rush you out the door.</p>
+        </div>
+        <div class="audience-card">
+          <div class="icon">🏘️</div>
+          <h3>Local Residents</h3>
+          <p>Your daily order, remembered. A loyalty punch card, neighborhood discount Mondays, and a patio that's open year-round.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu-section section-pad" id="menu">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">The Menu</span>
+        <h2>Coffee, food, and today's special.</h2>
+        <p>Everything's made fresh, table-side or to-go. Prices in USD.</p>
+      </div>
+
+      <div class="menu-tabs" role="tablist" aria-label="Menu categories">
+        <button class="menu-tab active" data-tab="coffee" role="tab" aria-selected="true">Coffee</button>
+        <button class="menu-tab" data-tab="food" role="tab" aria-selected="false">All-Day Food</button>
+        <button class="menu-tab" data-tab="cold" role="tab" aria-selected="false">Cold & Frappes</button>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-category active" data-cat="coffee">
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Classic Espresso</span>
+              <p class="menu-item-desc">Double shot, our house dark-roast blend.</p>
+            </div>
+            <span class="menu-item-price">$2.75</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Campus Latte</span>
+              <p class="menu-item-desc">Steamed milk, smooth espresso, light foam.</p>
+            </div>
+            <span class="menu-item-price">$4.25</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Caramel Cortado</span>
+              <p class="menu-item-desc">Equal parts espresso and warm milk, house caramel.</p>
+            </div>
+            <span class="menu-item-price">$4.75</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Cinnamon Cappuccino</span>
+              <p class="menu-item-desc">Thick foam, a dust of cinnamon on top.</p>
+            </div>
+            <span class="menu-item-price">$4.50</span>
+          </div>
+        </div>
+
+        <div class="menu-category" data-cat="food">
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Avocado Toast<span class="menu-tag">Popular</span></span>
+              <p class="menu-item-desc">Sourdough, smashed avocado, chili flake, soft egg.</p>
+            </div>
+            <span class="menu-item-price">$7.50</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Grilled Cheese & Tomato Soup</span>
+              <p class="menu-item-desc">Classic combo, comfort food for rainy lecture days.</p>
+            </div>
+            <span class="menu-item-price">$8.00</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Chicken Pesto Panini</span>
+              <p class="menu-item-desc">Grilled chicken, basil pesto, mozzarella, ciabatta.</p>
+            </div>
+            <span class="menu-item-price">$9.25</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Blueberry Pancake Stack</span>
+              <p class="menu-item-desc">Weekend brunch favorite, maple syrup, whipped butter.</p>
+            </div>
+            <span class="menu-item-price">$8.75</span>
+          </div>
+        </div>
+
+        <div class="menu-category" data-cat="cold">
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Iced Caramel Macchiato</span>
+              <p class="menu-item-desc">Cold milk, vanilla, espresso, caramel drizzle.</p>
+            </div>
+            <span class="menu-item-price">$5.25</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Mocha Frappe</span>
+              <p class="menu-item-desc">Blended chocolate-espresso, whipped cream.</p>
+            </div>
+            <span class="menu-item-price">$5.75</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Cold Brew</span>
+              <p class="menu-item-desc">Steeped 18 hours, served over ice, smooth finish.</p>
+            </div>
+            <span class="menu-item-price">$4.00</span>
+          </div>
+          <div class="menu-item">
+            <div>
+              <span class="menu-item-name">Strawberry Matcha</span>
+              <p class="menu-item-desc">Ceremonial matcha, fresh strawberry puree, oat milk.</p>
+            </div>
+            <span class="menu-item-price">$5.50</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="daily-highlight">
+        <div>
+          <span class="eyebrow" style="color:var(--terracotta);">Today's Highlight</span>
+          <h4>Hazelnut Croissant Latte</h4>
+          <p>Our barista's daily special — toasted hazelnut syrup with a warm croissant on the side. Available until 2pm or while supplies last.</p>
+        </div>
+        <a href="https://wa.me/15551234567?text=Hi%2C%20I%27d%20like%20to%20order%20today%27s%20Hazelnut%20Croissant%20Latte%20special" class="btn btn-whatsapp" target="_blank" rel="noopener">Order Today's Special</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section-pad" id="gallery">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Inside Aroma</span>
+        <h2>A look around the cafe.</h2>
+        <p>Warm light, exposed brick, and a corner that's always saved for you.</p>
+      </div>
+      <div class="gallery-grid">
+        <a class="gallery-item big" href="#" aria-label="View larger photo of cafe interior">
+          <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=900&auto=format&fit=crop" alt="Cozy cafe interior seating with warm lighting">
+        </a>
+        <a class="gallery-item" href="#" aria-label="View larger photo of latte art">
+          <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=600&auto=format&fit=crop" alt="Latte art close up">
+        </a>
+        <a class="gallery-item" href="#" aria-label="View larger photo of students studying">
+          <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=600&auto=format&fit=crop" alt="Students working on laptops in cafe">
+        </a>
+        <a class="gallery-item" href="#" aria-label="View larger photo of pastry display">
+          <img src="https://images.unsplash.com/photo-1517433367423-c7e5b0f35086?q=80&w=600&auto=format&fit=crop" alt="Pastry and croissant display case">
+        </a>
+        <a class="gallery-item" href="#" aria-label="View larger photo of outdoor patio">
+          <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=600&auto=format&fit=crop" alt="Outdoor patio seating with plants">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="section-pad reviews-wrap" id="reviews">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">What people say</span>
+        <h2>Loved by students and locals alike.</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="quote">My go-to spot between lectures. The WiFi never drops and nobody rushes you off a table — even during finals week.</p>
+          <div class="reviewer">
+            <div class="avatar">P</div>
+            <div><strong>Priya M.</strong><span>3rd Year, Maple Hill College</span></div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="quote">We bring the kids every Sunday for pancakes. Staff is always patient and the booths are spacious enough for the stroller.</p>
+          <div class="reviewer">
+            <div class="avatar">D</div>
+            <div><strong>The Alvarez Family</strong><span>Local Residents</span></div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="quote">Been ordering the same cold brew for two years and they still remember it before I ask. That's a real neighborhood cafe.</p>
+          <div class="reviewer">
+            <div class="avatar">J</div>
+            <div><strong>James K.</strong><span>Lives nearby</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION + CONTACT -->
+  <section class="section-pad contact-section" id="visit">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Visit or Reach Out</span>
+        <h2>Find us, or send a message.</h2>
+      </div>
+      <div class="contact-grid">
+        <div>
+          <div class="info-list">
+            <div class="info-row">
+              <div class="ic">📍</div>
+              <div>
+                <strong>Address</strong>
+                <span>14 College Walk, Maple Hill District — opposite the campus library gate</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="ic">🕒</div>
+              <div>
+                <strong>Hours</strong>
+                <span>Mon–Fri 7:00am–9:00pm · Sat–Sun 8:00am–9:00pm</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="ic">📞</div>
+              <div>
+                <strong>Phone</strong>
+                <span><a href="tel:+15551234567">(555) 123-4567</a></span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="ic">💬</div>
+              <div>
+                <strong>WhatsApp Orders</strong>
+                <span><a href="https://wa.me/15551234567" target="_blank" rel="noopener">wa.me/15551234567</a></span>
+              </div>
+            </div>
+          </div>
+          <div class="map-frame">
+            <iframe
+              src="https://www.google.com/maps?q=college%20campus%20coffee%20shop&output=embed"
+              title="Map showing Aroma Cafe location near campus"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <form id="contactForm" aria-label="Contact Aroma Cafe">
+          <div class="field">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@email.com">
+            </div>
+          </div>
+          <div class="field">
+            <label for="reason">Reason for Contact</label>
+            <select id="reason" name="reason">
+              <option>General Inquiry</option>
+              <option>Table Reservation</option>
+              <option>Group / Study Room Booking</option>
+              <option>Feedback</option>
+              <option>Catering Request</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us a bit more..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-solid form-submit">Send Message</button>
+          <p class="form-note">We typically reply within a few hours during opening hours.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="wrap">
+      <span class="eyebrow" style="color:var(--gold);">Skip the line</span>
+      <h2>Order ahead, pick it up warm.</h2>
+      <p>Message us your order on WhatsApp and we'll have it ready when you walk in — no waiting between classes.</p>
+      <div class="hero-actions">
+        <a href="https://wa.me/15551234567?text=Hi%20Aroma%20Cafe%2C%20I%27d%20like%20to%20order" class="btn btn-whatsapp" target="_blank" rel="noopener">💬 Order on WhatsApp</a>
+        <a href="tel:+15551234567" class="btn btn-outline" style="border-color:var(--cream); color:var(--cream);">📞 Call (555) 123-4567</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <a href="#top" class="logo">☕ Aroma<span style="color:var(--gold);">Cafe</span></a>
+      <div class="footer-links">
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#visit">Visit</a>
+      </div>
+      <a href="https://wa.me/15551234567" class="btn btn-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <p class="footer-bottom">© 2026 Aroma Cafe. 14 College Walk, Maple Hill District. All rights reserved.</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/15551234567?text=Hi%20Aroma%20Cafe%2C%20I%27d%20like%20to%20order" class="float-whatsapp" target="_blank" rel="noopener" aria-label="Order via WhatsApp">
+  💬
+</a>
+
+<script>
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', false);
+  }));
+
+  // Menu tabs
+  const tabs = document.querySelectorAll('.menu-tab');
+  const cats = document.querySelectorAll('.menu-category');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected','true');
+      const target = tab.dataset.tab;
+      cats.forEach(c => c.classList.toggle('active', c.dataset.cat === target));
+    });
+  });
+
+  // Contact form (demo submit -> WhatsApp handoff)
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const reason = document.getElementById('reason').value;
+    const message = document.getElementById('message').value;
+    const text = encodeURIComponent(`Hi Aroma Cafe, my name is ${name}. Reason: ${reason}. Message: ${message}`);
+    window.open(`https://wa.me/15551234567?text=${text}`, '_blank');
+  });
+</script>
+
+</body>
+</html>
